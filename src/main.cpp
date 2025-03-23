@@ -3,18 +3,20 @@
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
 
-int add(int i, int j) {
+int add(int i, int j)
+{
     return i + j;
 }
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(cmake_example, m) {
+PYBIND11_MODULE(aethermark, m)
+{
     m.doc() = R"pbdoc(
         Pybind11 example plugin
         -----------------------
 
-        .. currentmodule:: cmake_example
+        .. currentmodule:: aethermark
 
         .. autosummary::
            :toctree: _generate
@@ -29,7 +31,8 @@ PYBIND11_MODULE(cmake_example, m) {
         Some other explanation about the add function.
     )pbdoc");
 
-    m.def("subtract", [](int i, int j) { return i - j; }, R"pbdoc(
+    m.def("subtract", [](int i, int j)
+          { return i - j; }, R"pbdoc(
         Subtract two numbers
 
         Some other explanation about the subtract function.

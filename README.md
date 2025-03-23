@@ -1,92 +1,117 @@
-# cmake_example for pybind11
+# Aethermark
 
-[![Gitter][gitter-badge]][gitter-link]
-
-|      CI              | status |
-|----------------------|--------|
-| MSVC 2019            | [![AppVeyor][appveyor-badge]][appveyor-link] |
-| conda.recipe         | [![Conda Actions Status][actions-conda-badge]][actions-conda-link] |
-| pip builds           | [![Pip Actions Status][actions-pip-badge]][actions-pip-link] |
-| [`cibuildwheel`][]   | [![Wheels Actions Status][actions-wheels-badge]][actions-wheels-link] |
-
-[gitter-badge]:            https://badges.gitter.im/pybind/Lobby.svg
-[gitter-link]:             https://gitter.im/pybind/Lobby
-[actions-badge]:           https://github.com/pybind/cmake_example/workflows/Tests/badge.svg
-[actions-conda-link]:      https://github.com/pybind/cmake_example/actions?query=workflow%3A%22Conda
-[actions-conda-badge]:     https://github.com/pybind/cmake_example/workflows/Conda/badge.svg
-[actions-pip-link]:        https://github.com/pybind/cmake_example/actions?query=workflow%3A%22Pip
-[actions-pip-badge]:       https://github.com/pybind/cmake_example/workflows/Pip/badge.svg
-[actions-wheels-link]:     https://github.com/pybind/cmake_example/actions?query=workflow%3AWheels
-[actions-wheels-badge]:    https://github.com/pybind/cmake_example/workflows/Wheels/badge.svg
-[appveyor-link]:           https://ci.appveyor.com/project/dean0x7d/cmake-example/branch/master
-[appveyor-badge]:          https://ci.appveyor.com/api/projects/status/57nnxfm4subeug43/branch/master?svg=true
-
-An example [pybind11](https://github.com/pybind/pybind11) module built with a
-CMake-based build system. This is useful for C++ codebases that have an
-existing CMake project structure. This is being replaced by
-[`scikit_build_example`](https://github.com/pybind/scikit_build_example), which uses
-[scikit-build-core][], which is designed to allow Python
-packages to be driven from CMake without depending on setuptools. The approach here has
-some trade-offs not present in a pure setuptools build (see
-[`python_example`](https://github.com/pybind/python_example)) or scikit-build-core. Python 3.7+ required;
-see the commit history for older versions of Python.
-
-Problems vs. scikit-build-core based example:
-
-- You have to manually copy fixes/additions when they get added to this example (like when Apple Silicon support was added)
-- Modern editable installs are not supported (scikit-build-core doesn't support them either yet, but probably will soon)
-- You are depending on setuptools, which can and will change
-- You are stuck with an all-or-nothing approach to adding cmake/ninja via wheels (scikit-build-core adds these only as needed, so it can be used on BSD, Cygwin, Pyodide, Android, etc)
-- You are stuck with whatever CMake ships with (scikit-build-core backports FindPython for you)
-
-
-## Prerequisites
-
-* A compiler with C++11 support
-* Pip 10+ or CMake >= 3.4 (or 3.14+ on Windows, which was the first version to support VS 2019)
-* Ninja or Pip 10+
-
+Aethermark is a C++ extension for Python built using Pybind11 and CMake. This project demonstrates how to integrate C++ code with Python and automate versioning, building, and publishing.
 
 ## Installation
 
-Just clone this repository and pip install. Note the `--recursive` option which is
-needed for the pybind11 submodule:
+You can install Aethermark from PyPI once published:
 
-```bash
-git clone --recursive https://github.com/pybind/cmake_example.git
-pip install ./cmake_example
+```sh
+pip install aethermark
 ```
 
-With the `setup.py` file included in this example, the `pip install` command will
-invoke CMake and build the pybind11 module as specified in `CMakeLists.txt`.
+Alternatively, to install from source:
 
+```sh
+git clone https://github.com/yourusername/aethermark.git
+cd aethermark
+pip install .
+```
 
+## Usage
 
-## Building the documentation
+Once installed, you can use Aethermark in Python as follows:
 
-Documentation for the example project is generated using Sphinx. Sphinx has the
-ability to automatically inspect the signatures and documentation strings in
-the extension module to generate beautiful documentation in a variety formats.
-The following command generates HTML-based reference documentation; for other
-formats please refer to the Sphinx manual:
+```python
+import aethermark
+print(aethermark.add(2, 3))  # Outputs: 5
+print(aethermark.subtract(5, 2))  # Outputs: 3
+```
 
- - `cd cmake_example/docs`
- - `make html`
+## Building from Source
 
+### Requirements
+
+- Python 3.7+
+- CMake 3.4+
+- A C++ compiler (GCC, Clang, or MSVC)
+- `pip install scikit-build`
+
+### Steps
+
+To build the package locally:
+
+```sh
+git clone https://github.com/yourusername/aethermark.git
+cd aethermark
+pip install .
+```
+
+Or, to build manually:
+
+```sh
+mkdir build
+cd build
+cmake ..
+make -j
+```
+
+## Publishing to PyPI
+
+### 1. Update Version
+
+Ensure the `VERSION` file in the root contains the correct version (e.g., `0.1.0`).
+
+### 2. Build the Distribution
+
+```sh
+pip install build twine
+python -m build
+```
+
+### 3. Upload to PyPI
+
+```sh
+twine upload dist/*
+```
+
+## Automating Releases with GitHub Actions
+
+To trigger a release manually:
+
+1. Push a new commit with an updated `VERSION` file.
+2. Run the `publish.yml` GitHub Action workflow.
+
+## Contributing
+
+Pull requests are welcome! Please ensure your changes follow the project structure and best practices.
 
 ## License
 
-Pybind11 is provided under a BSD-style license that can be found in the LICENSE
-file. By using, distributing, or contributing to this project, you agree to the
-terms and conditions of this license.
+MIT License. See `LICENSE` for details.
 
+---
 
-## Test call
+Notes
+Using a virtual environment prevents conflicts with system-wide dependencies.
 
-```python
-import cmake_example
-cmake_example.add(1, 2)
+```bash
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install --upgrade pip setuptools wheel pytest
 ```
 
-[`cibuildwheel`]:    https://cibuildwheel.readthedocs.io
-[scikit-build-core]: https://github.com/scikit-build/scikit-build-core
+Always remove old build artifacts before building to prevent stale binaries from interfering.
+
+```bash
+rm -rf build dist *.egg-info
+python3 setup.py clean
+python3 setup.py bdist_wheel
+```
+
+Instead of running tests inside the build directory, install the generated wheel and test it as an installed package (like your users would).
+
+```bash
+pip install --force-reinstall dist/aethermark-*.whl
+pytest
+```

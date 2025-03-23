@@ -22,17 +22,24 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install scikit-build build twine
+          python -m pip install --upgrade pip
+          pip install twine setuptools wheel
 
       - name: Build package
-        run: python -m build
+        run: |
+          rm -rf dist/  # Ensure a clean build
+          python setup.py bdist_wheel
 
       - name: Create Git tag
         run: |
           git config --global user.email "your-email@example.com"
           git config --global user.name "Your Name"
-          git tag "v${{ env.VERSION }}"
-          git push origin "v${{ env.VERSION }}"
+          if ! git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
+            git tag "v${{ env.VERSION }}"
+            git push origin "v${{ env.VERSION }}"
+          else
+            echo "Tag v${{ env.VERSION }} already exists. Skipping tagging."
+          fi
 
       - name: Publish to PyPI
         env:

@@ -23,23 +23,20 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install twine build
+          pip install twine setuptools wheel cmake pybind11
 
-      - name: Build package inside Manylinux Docker
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+
+      - name: Build package
         run: |
-          docker run --rm -v $(pwd):/project quay.io/pypa/manylinux2014_x86_64 \
-          /bin/bash -c "
-            cd /project &&
-            /opt/python/cp39-cp39/bin/python -m pip install --upgrade pip &&
-            /opt/python/cp39-cp39/bin/python -m pip install setuptools wheel auditwheel &&
-            /opt/python/cp39-cp39/bin/python -m build &&
-            auditwheel repair dist/*.whl -w wheelhouse/
-          "
+          rm -rf dist/  # Ensure a clean build
+          python3 setup.py sdist bdist_wheel --universal
 
       - name: Create Git tag
         run: |
-          git config --global user.email "mukulwaval@example.com"
-          git config --global user.name "MukulWaval"
+          git config --global user.email "your-email@example.com"
+          git config --global user.name "Your Name"
           if ! git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
             git tag "v${{ env.VERSION }}"
             git push origin "v${{ env.VERSION }}"
@@ -49,6 +46,6 @@ jobs:
 
       - name: Publish to PyPI
         env:
-          TWINE_USERNAME: "__token__"
-          TWINE_PASSWORD: "${{ secrets.PYPI_API_TOKEN }}"
-        run: twine upload wheelhouse/*.whl --verbose
+        TWINE_USERNAME: "__token__"
+        TWINE_PASSWORD: "${{ secrets.PYPI_API_TOKEN }}"
+        run: twine upload dist/* --verbose

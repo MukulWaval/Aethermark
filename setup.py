@@ -122,8 +122,12 @@ class CMakeBuild(build_ext):
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
         )
 
-with open("VERSION", "r") as version_file:
-    version = version_file.read().strip()
+VERSION_PATH = os.path.join(os.path.dirname(__file__), "VERSION")
+if os.path.exists(VERSION_PATH):
+    with open(VERSION_PATH, "r") as f:
+        version = f.read().strip()
+else:
+    version = "0.0.0"  # Fallback version
 
 setup(
     name="aethermark",

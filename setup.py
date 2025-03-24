@@ -109,7 +109,7 @@ setup(
     version=version,
     author="MukulWaval",
     author_email="mukulwaval2000@gmail.com",
-    description="A test project using pybind11 and CMake",
+    description="A parser and renderer for Aether markdown",
     long_description=long_description,
     long_description_content_type="text/markdown",
     ext_modules=[CMakeExtension("aethermark")],

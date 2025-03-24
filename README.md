@@ -1,5 +1,7 @@
 # Aethermark
 
+[![Test](https://github.com/MukulWaval/Aethermark/actions/workflows/test.yml/badge.svg)](https://github.com/MukulWaval/Aethermark/actions/workflows/test.yml)
+
 Aethermark is a high-performance, extensible Markdown parser and renderer designed with Aether-flavored Markdown (AFM), a custom dialect that enhances standard Markdown with additional features and improved rendering capabilities.
 
 ## Installation

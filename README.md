@@ -106,12 +106,12 @@ Always remove old build artifacts before building to prevent stale binaries from
 ```bash
 rm -rf build dist *.egg-info
 python3 setup.py clean
-python3 setup.py bdist_wheel
+python3 setup.py sdist bdist_wheel --universal
 ```
 
 Instead of running tests inside the build directory, install the generated wheel and test it as an installed package (like your users would).
 
 ```bash
-pip install --force-reinstall dist/aethermark-*.whl
+pip install --force-reinstall --no-cache-dir dist/aethermark-*.tar.gz
 pytest
 ```

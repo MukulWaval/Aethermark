@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install setuptools wheel cmake pybind11
+          pip install setuptools wheel cmake pybind11 pytest
 
       - name: Checkout submodules
         run: git submodule update --init --recursive

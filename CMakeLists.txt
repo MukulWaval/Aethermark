@@ -5,8 +5,6 @@ project(aethermark)
 file(READ "${CMAKE_SOURCE_DIR}/VERSION" VERSION_INFO)
 string(STRIP ${VERSION_INFO} VERSION_INFO)  # Remove any extra spaces/newlines
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
-
 add_subdirectory(pybind11)
 pybind11_add_module(aethermark src/binding.cpp)
 

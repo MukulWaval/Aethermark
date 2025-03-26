@@ -1,9 +1,11 @@
 #include "NodeWalker.hpp"
 #include "Node.hpp"
 
+// Constructor
 NodeWalker::NodeWalker(std::shared_ptr<Node> root)
     : current(root), root(root), entering(true) {}
 
+// Methods
 std::pair<bool, std::shared_ptr<Node>> NodeWalker::next()
 {
     if (!current)
@@ -51,6 +53,7 @@ void NodeWalker::resumeAt(std::shared_ptr<Node> node, bool enteringState)
     entering = enteringState;
 }
 
+// Pybind11 binding method
 void NodeWalker::bind_node_walker(pybind11::module &m)
 {
     static bool registered = false; // Prevent re-registering
@@ -59,7 +62,10 @@ void NodeWalker::bind_node_walker(pybind11::module &m)
     registered = true;
 
     pybind11::class_<NodeWalker>(m, "NodeWalker")
+        // Constructor
         .def(pybind11::init<std::shared_ptr<Node>>())
+
+        // Methods
         .def("next", &NodeWalker::next)
         .def("resume_at", &NodeWalker::resumeAt);
 }

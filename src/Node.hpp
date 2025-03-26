@@ -9,36 +9,50 @@
 class Node : public std::enable_shared_from_this<Node>
 {
 public:
+    // Constructor
     Node(const std::string &type, const std::vector<std::vector<int>> &sourcepos = {});
 
+    // Methods
     void appendChild(std::shared_ptr<Node> child);
     void prependChild(std::shared_ptr<Node> child);
     void unlink();
     void insertAfter(std::shared_ptr<Node> sibling);
     void insertBefore(std::shared_ptr<Node> sibling);
+    bool isContainer() const;
+    std::unique_ptr<NodeWalker> walker();
 
-    // getters and setters
+    // Properties
     std::string getType() const;
-    std::shared_ptr<Node> getFirstChild() const;
-    std::shared_ptr<Node> getLastChild() const;
-    std::shared_ptr<Node> getNext() const;
-    std::shared_ptr<Node> getPrev() const;
-    std::shared_ptr<Node> getParent() const;
+    void setType(const std::string &s);
+
     std::vector<std::vector<int>> getSourcepos() const;
+    void setSourcepos(const std::vector<std::vector<int>> &s);
+
     std::string getLiteral() const;
     void setLiteral(const std::string &s);
+
     std::string getDestination() const;
     void setDestination(const std::string &s);
+
     std::string getTitle() const;
     void setTitle(const std::string &s);
+
     std::string getInfo() const;
     void setInfo(const std::string &s);
+
     int getLevel() const;
     void setLevel(int s);
-    bool isContainer() const;
 
-    // node walker
-    std::unique_ptr<NodeWalker> walker();
+    // Read-only properties
+    std::shared_ptr<Node> getFirstChild() const;
+
+    std::shared_ptr<Node> getLastChild() const;
+
+    std::shared_ptr<Node> getNext() const;
+
+    std::shared_ptr<Node> getPrev() const;
+
+    std::shared_ptr<Node> getParent() const;
 
     // Pybind11 binding method
     static void bind_node(pybind11::module &m);

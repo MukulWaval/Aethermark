@@ -32,7 +32,7 @@ def test_node_walker():
     for expected_entering, expected_type in expected_events:
         event = walker.next()
         assert event[0] == expected_entering, f"Expected entering={expected_entering}, got {event[0]}"
-        assert event[1].get_type() == expected_type, f"Expected type={expected_type}, got {event[1].get_type()}"
+        assert event[1].type == expected_type, f"Expected type={expected_type}, got {event[1].type}"
 
 def test_resume_at():
     """Test resuming walker at a specific node."""
@@ -48,7 +48,7 @@ def test_resume_at():
 
     event = walker.next()
     assert event[0] == True  # Entering
-    assert event[1].get_type() == "heading"
+    assert event[1].type == "heading"
 
 if __name__ == "__main__":
     pytest.main()

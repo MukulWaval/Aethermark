@@ -10,8 +10,10 @@ class Node;
 class NodeWalker
 {
 public:
+    // Constructor
     explicit NodeWalker(std::shared_ptr<Node> root);
 
+    // Methods
     std::pair<bool, std::shared_ptr<Node>> next();
     void resumeAt(std::shared_ptr<Node> node, bool entering);
 

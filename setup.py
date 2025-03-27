@@ -1,10 +1,11 @@
+import glob
 import os
 import re
 import subprocess
 import sys
 from pathlib import Path
 
-from setuptools import Extension, setup
+from setuptools import Extension, find_packages, setup
 from setuptools.command.build_ext import build_ext
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
@@ -104,6 +105,9 @@ if os.path.exists(README_PATH):
 else:
     long_description = ""
 
+# Dynamically find all .pyi files in src/
+pyi_files = [os.path.relpath(p, "src") for p in glob.glob("src/**/*.pyi", recursive=True)]
+
 setup(
     name="aethermark",
     version=version,
@@ -118,4 +122,8 @@ setup(
     extras_require={"test": ["pytest>=6.0"]},
     python_requires=">=3.7",
     install_requires=["pybind11"],
+    packages=find_packages(where="src"),  # Look for packages in "src"
+    package_dir={"": "src"},  # Tell setuptools that packages are in "src"
+    package_data={"": pyi_files},  # Dynamically include all .pyi files
+    include_package_data=True,  # Include package data in distribution
 )
